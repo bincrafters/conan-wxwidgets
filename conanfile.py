@@ -5,57 +5,79 @@ from conans import ConanFile, CMake, tools
 import os
 
 
-class LibnameConan(ConanFile):
-    name = "libname"
-    version = "0.0.0"
-    description = "Keep it short"
+class wxWidgetsConan(ConanFile):
+    name = "wxwidgets"
+    version = "3.1.1"
+    description = "wxWidgets is a C++ library that lets developers create applications for Windows, Mac OS X, " \
+                  "Linux and other platforms with a single code base."
     url = "https://github.com/bincrafters/conan-libname"
-    homepage = "https://github.com/original_author/original_lib"
+    homepage = "https://www.wxwidgets.org/"
     author = "Bincrafters <bincrafters@gmail.com>"
-    # Indicates License type of the packaged library
-    license = "MIT"
-
-    # Packages the license for the conanfile.py
+    license = "wxWidgets"
     exports = ["LICENSE.md"]
-
-    # Remove following lines if the target lib does not use cmake.
     exports_sources = ["CMakeLists.txt"]
     generators = "cmake"
-
-    # Options may need to change depending on the packaged library.
     settings = "os", "arch", "compiler", "build_type"
-    options = {"shared": [True, False], "fPIC": [True, False]}
-    default_options = "shared=False", "fPIC=True"
-
-    # Custom attributes for Bincrafters recipe conventions
+    options = {"shared": [True, False],
+               "fPIC": [True, False],
+               "zlib": [None, "system", "zlib"],
+               "png": [None, "system", "libpng"],
+               "jpeg": [None, "system", "libjpeg", "libjpeg-turbo"],
+               "tiff": [None, "system", "libtiff"],
+               "expat": [None, "system", "expat"]}
+    default_options = "shared=False",\
+                      "fPIC=True",\
+                      "zlib=zlib",\
+                      "png=libpng",\
+                      "jpeg=libjpeg",\
+                      "tiff=libtiff",\
+                      "expat=expat"
     source_subfolder = "source_subfolder"
     build_subfolder = "build_subfolder"
-
-    # Use version ranges for dependencies unless there's a reason not to
-    # Update 2/9/18 - Per conan team, ranges are slow to resolve.
-    # So, with libs like zlib, updates are very rare, so we now use static version
-
-
-    requires = (
-        "OpenSSL/[>=1.0.2l]@conan/stable",
-        "zlib/1.2.11@conan/stable"
-    )
 
     def config_options(self):
         if self.settings.os == 'Windows':
             del self.options.fPIC
 
+    def requirements(self):
+        if self.options.png == 'libpng':
+            self.requires.add('libpng/1.6.34@bincrafters/stable')
+        if self.options.jpeg == 'libjpeg':
+            self.requires.add('libjpeg/9c@bincrafters/stable')
+        elif self.options.jpeg == 'libjpeg-turbo':
+            self.requires.add('libjpeg-turbo/1.5.2@bincrafters/stable')
+        if self.options.tiff == 'libtiff':
+            self.requires.add('libtiff/4.0.9@bincrafters/stable')
+        if self.options.zlib == 'zlib':
+            self.requires.add('zlib/1.2.11@conan/stable')
+        if self.options.expat == 'expat':
+            self.requires.add('expat/2.2.5@bincrafters/stable')
+
     def source(self):
-        source_url = "https://github.com/libauthor/libname"
+        source_url = "https://github.com/wxWidgets/wxWidgets"
         tools.get("{0}/archive/v{1}.tar.gz".format(source_url, self.version))
         extracted_dir = self.name + "-" + self.version
-
-        #Rename to "source_subfolder" is a convention to simplify later steps
         os.rename(extracted_dir, self.source_subfolder)
 
     def configure_cmake(self):
+        def option_value(option):
+            return 'OFF' if option is None else 'sys'
         cmake = CMake(self)
-        cmake.definitions["BUILD_TESTS"] = False # example
+        cmake.definitions['wxBUILD_SHARED'] = self.options.shared
+        cmake.definitions['wxBUILD_SAMPLES'] = 'OFF'
+        cmake.definitions['wxBUILD_TESTS'] = 'OFF'
+        cmake.definitions['wxBUILD_DEMOS'] = 'OFF'
+        cmake.definitions['wxBUILD_INSTALL'] = True
+
+        if self.settings.compiler == 'Visual Studio':
+            cmake.definitions['wxBUILD_USE_STATIC_RUNTIME'] = 'MT' in str(self.settings.compiler.runtime)
+            cmake.definitions['wxBUILD_MSVC_MULTIPROC'] = True
+
+        cmake.definitions['wxUSE_LIBPNG'] = option_value(self.options.png)
+        cmake.definitions['wxUSE_LIBJPEG'] = option_value(self.options.jpeg)
+        cmake.definitions['wxUSE_LIBTIFF'] = option_value(self.options.tiff)
+        cmake.definitions['wxUSE_ZLIB'] = option_value(self.options.zlib)
+        cmake.definitions['wxUSE_EXPAT'] = option_value(self.options.expat)
         if self.settings.os != 'Windows':
             cmake.definitions['CMAKE_POSITION_INDEPENDENT_CODE'] = self.options.fPIC
         cmake.configure(build_folder=self.build_subfolder)
