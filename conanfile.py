@@ -56,7 +56,7 @@ class wxWidgetsConan(ConanFile):
     def source(self):
         source_url = "https://github.com/wxWidgets/wxWidgets"
         tools.get("{0}/archive/v{1}.tar.gz".format(source_url, self.version))
-        extracted_dir = self.name + "-" + self.version
+        extracted_dir = "wxWidgets-" + self.version
         os.rename(extracted_dir, self.source_subfolder)
 
     def configure_cmake(self):
