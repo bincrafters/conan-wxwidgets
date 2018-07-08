@@ -302,10 +302,11 @@ class wxWidgetsConan(ConanFile):
             self.cpp_info.includedirs.append(os.path.join('include', 'msvc'))
             if self.settings.arch == 'x86_64':
                 libdir = 'vc_x64_dll' if self.options.shared else 'vc_x64_lib'
-                self.cpp_info.libdirs.append(os.path.join('lib', libdir))
             elif self.settings.arch == 'x86':
                 libdir = 'vc_dll' if self.options.shared else 'vc_lib'
-                self.cpp_info.libdirs.append(os.path.join('lib', libdir))
+            libdir = os.path.join('lib', libdir)
+            self.cpp_info.bindirs.append(libdir)
+            self.cpp_info.libdirs.append(libdir)
             # disable annoying auto-linking
             self.cpp_info.defines.extend(['wxNO_NET_LIB',
                                           'wxNO_XML_LIB',
