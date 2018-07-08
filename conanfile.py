@@ -258,7 +258,7 @@ class wxWidgetsConan(ConanFile):
             libs.append(library_pattern('webview'))
         if self.options.xrc:
             libs.append(library_pattern('xrc'))
-        for lib in libs:
+        for lib in reversed(libs):
             self.cpp_info.libs.append(lib.format(prefix=prefix,
                                                  toolkit=toolkit,
                                                  version=version,
