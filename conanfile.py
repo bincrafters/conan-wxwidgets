@@ -22,7 +22,7 @@ class wxWidgetsConan(ConanFile):
                "fPIC": [True, False],
                "zlib": [None, "system", "zlib"],
                "png": [None, "system", "libpng"],
-               "jpeg": [None, "system", "libjpeg", "libjpeg-turbo"],
+               "jpeg": [None, "system", "libjpeg", "libjpeg-turbo", "mozjpeg"],
                "tiff": [None, "system", "libtiff"],
                "expat": [None, "system", "expat"]}
     default_options = "shared=False",\
@@ -46,6 +46,8 @@ class wxWidgetsConan(ConanFile):
             self.requires.add('libjpeg/9c@bincrafters/stable')
         elif self.options.jpeg == 'libjpeg-turbo':
             self.requires.add('libjpeg-turbo/1.5.2@bincrafters/stable')
+        elif self.options.jpeg == 'mozjpeg':
+            self.requires.add('mozjpeg/3.3.1@bincrafters/stable')
         if self.options.tiff == 'libtiff':
             self.requires.add('libtiff/4.0.9@bincrafters/stable')
         if self.options.zlib == 'zlib':
@@ -91,15 +93,53 @@ class wxWidgetsConan(ConanFile):
         self.copy(pattern="LICENSE", dst="licenses", src=self.source_subfolder)
         cmake = self.configure_cmake()
         cmake.install()
-        # If the CMakeLists.txt has a proper install method, the steps below may be redundant
-        # If so, you can just remove the lines below
-        include_folder = os.path.join(self.source_subfolder, "include")
-        self.copy(pattern="*", dst="include", src=include_folder)
-        self.copy(pattern="*.dll", dst="bin", keep_path=False)
-        self.copy(pattern="*.lib", dst="lib", keep_path=False)
-        self.copy(pattern="*.a", dst="lib", keep_path=False)
-        self.copy(pattern="*.so*", dst="lib", keep_path=False)
-        self.copy(pattern="*.dylib", dst="lib", keep_path=False)
 
     def package_info(self):
+        self.cpp_info.defines.append('wxUSE_GUI=1')
+        if self.settings.build_type == 'Debug':
+            self.cpp_info.defines.append('__WXDEBUG__')
+        if self.options.shared:
+            self.cpp_info.defines.append('WXUSINGDLL')
+        if self.settings.compiler == 'Visual Studio':
+            self.cpp_info.defines.append('__WXMSW__')
+            self.cpp_info.includedirs.append(os.path.join('include', 'msvc'))
+            if self.settings.arch == 'x86_64':
+                self.cpp_info.libdirs.append(os.path.join('lib', 'vc_x64_lib'))
+            elif self.settings.arch == 'x86':
+                self.cpp_info.libdirs.append(os.path.join('lib', 'vc_x86_lib'))
+            # disable annoying auto-linking
+            self.cpp_info.defines.extend(['wxNO_NET_LIB',
+                                          'wxNO_XML_LIB',
+                                          'wxNO_REGEX_LIB',
+                                          'wxNO_ZLIB_LIB',
+                                          'wxNO_JPEG_LIB',
+                                          'wxNO_PNG_LIB',
+                                          'wxNO_TIFF_LIB',
+                                          'wxNO_ADV_LIB',
+                                          'wxNO_HTML_LIB',
+                                          'wxNO_GL_LIB',
+                                          'wxNO_QA_LIB',
+                                          'wxNO_XRC_LIB',
+                                          'wxNO_AUI_LIB',
+                                          'wxNO_PROPGRID_LIB',
+                                          'wxNO_RIBBON_LIB',
+                                          'wxNO_RICHTEXT_LIB',
+                                          'wxNO_MEDIA_LIB',
+                                          'wxNO_STC_LIB',
+                                          'wxNO_WEBVIEW_LIB'])
+            self.cpp_info.libs.extend(['kernel32',
+                                       'user32',
+                                       'gdi32',
+                                       'comdlg32',
+                                       'winspool',
+                                       'shell32',
+                                       'comctl32',
+                                       'ole32',
+                                       'oleaut32',
+                                       'uuid',
+                                       'wininet',
+                                       'rpcrt4',
+                                       'winmm',
+                                       'advapi32',
+                                       'wsock32'])
         self.cpp_info.libs = tools.collect_libs(self)
