@@ -90,7 +90,8 @@ class wxWidgetsConan(ConanFile):
                 if self.options.secretstore:
                     packages.append('libsecret-1-dev%s' % arch_suffix)
                 if self.options.opengl:
-                    packages.append('mesa-common-dev%s' % arch_suffix)
+                    packages.extend(['mesa-common-dev%s' % arch_suffix,
+                                     'libgl1-mesa-dev%s' % arch_suffix])
                 if self.options.webview:
                     packages.extend(['libsoup2.4-dev%s' % arch_suffix,
                                      'libwebkitgtk-dev%s' % arch_suffix])
