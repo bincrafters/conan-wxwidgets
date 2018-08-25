@@ -277,7 +277,7 @@ class wxWidgetsConan(ConanFile):
             self.add_libraries_from_pc('gtk+-2.0')
             self.add_libraries_from_pc('x11')
             self.cpp_info.libs.extend(['dl', 'pthread'])
-        if self.settings.os == 'Macos':
+        elif self.settings.os == 'Macos':
             self.cpp_info.defines.extend(['__WXMAC__', '__WXOSX__', '__WXOSX_COCOA__'])
             for framework in ['Carbon',
                               'Cocoa',
@@ -298,16 +298,18 @@ class wxWidgetsConan(ConanFile):
                               'WebKit']:
                 self.cpp_info.exelinkflags.append('-framework %s' % framework)
             self.cpp_info.sharedlinkflags = self.cpp_info.exelinkflags
-        if self.settings.compiler == 'Visual Studio':
-            self.cpp_info.defines.append('__WXMSW__')
-            self.cpp_info.includedirs.append(os.path.join('include', 'msvc'))
-            if self.settings.arch == 'x86_64':
-                libdir = 'vc_x64_dll' if self.options.shared else 'vc_x64_lib'
-            elif self.settings.arch == 'x86':
-                libdir = 'vc_dll' if self.options.shared else 'vc_lib'
+        elif self.settings.os == 'Windows':
+            # see cmake/init.cmake
+            compiler_prefix = {'Visual Studio': 'vc',
+                               'gcc': 'gcc',
+                               'clang': 'clang'}.get(str(self.settings.compiler))
+            arch_suffix = '_x64' if self.settings.arch == 'x86_64' else ''
+            lib_suffix = '_dll' if self.options.shared else '_lib'
+            libdir = '%s%s%s' % (compiler_prefix, arch_suffix, lib_suffix)
             libdir = os.path.join('lib', libdir)
             self.cpp_info.bindirs.append(libdir)
             self.cpp_info.libdirs.append(libdir)
+            self.cpp_info.defines.append('__WXMSW__')
             # disable annoying auto-linking
             self.cpp_info.defines.extend(['wxNO_NET_LIB',
                                           'wxNO_XML_LIB',
@@ -343,3 +345,5 @@ class wxWidgetsConan(ConanFile):
                                        'winmm',
                                        'advapi32',
                                        'wsock32'])
+        if self.settings.compiler == 'Visual Studio':
+            self.cpp_info.includedirs.append(os.path.join('include', 'msvc'))
