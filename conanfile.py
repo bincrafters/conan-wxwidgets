@@ -148,7 +148,8 @@ class wxWidgetsConan(ConanFile):
         cmake.definitions['wxBUILD_DEMOS'] = 'OFF'
         cmake.definitions['wxBUILD_INSTALL'] = True
         cmake.definitions['wxBUILD_COMPATIBILITY'] = self.options.compatibility
-        cmake.definitions['wxBUILD_PRECOMP'] = 'OFF'
+        if self.settings.compiler == 'clang':
+            cmake.definitions['wxBUILD_PRECOMP'] = 'OFF'
 
         # platform-specific options
         if self.settings.compiler == 'Visual Studio':
