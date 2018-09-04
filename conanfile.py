@@ -349,5 +349,11 @@ class wxWidgetsConan(ConanFile):
                                        'winmm',
                                        'advapi32',
                                        'wsock32'])
+            # Link a few libraries that are needed when using gcc on windows
+            if self.settings.compiler == 'gcc':
+                self.cpp_info.libs.extend(['uxtheme',
+                                           'version',
+                                           'shlwapi',
+                                           'oleacc'])
         if self.settings.compiler == 'Visual Studio':
             self.cpp_info.includedirs.append(os.path.join('include', 'msvc'))
