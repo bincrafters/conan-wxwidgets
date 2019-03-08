@@ -119,7 +119,7 @@ class wxWidgetsConan(ConanFile):
         if self.options.zlib == 'zlib':
             self.requires.add('zlib/1.2.11@conan/stable')
         if self.options.expat == 'expat':
-            self.requires.add('expat/2.2.5@bincrafters/stable')
+            self.requires.add('Expat/2.2.6@pix4d/stable')
 
     def source(self):
         source_url = "https://github.com/wxWidgets/wxWidgets"
