@@ -14,7 +14,7 @@ class wxWidgetsConan(ConanFile):
     homepage = "https://www.wxwidgets.org/"
     author = "Bincrafters <bincrafters@gmail.com>"
     license = "wxWidgets"
-    exports = ["LICENSE.md"]
+    exports = ["LICENSE.md", "*.patch"]
     exports_sources = ["CMakeLists.txt"]
     generators = "cmake"
     settings = "os", "arch", "compiler", "build_type"
@@ -126,6 +126,7 @@ class wxWidgetsConan(ConanFile):
         tools.get("{0}/archive/v{1}.tar.gz".format(source_url, self.version))
         extracted_dir = "wxWidgets-" + self.version
         os.rename(extracted_dir, self.source_subfolder)
+        tools.patch(self.source_subfolder, "424f64f27d94f83ed946ebfcf9b9543c828f9f25.patch")
 
     def add_libraries_from_pc(self, library):
         pkg_config = tools.PkgConfig(library)
