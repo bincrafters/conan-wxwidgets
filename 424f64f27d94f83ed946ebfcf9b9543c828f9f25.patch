@@ -1,0 +1,27 @@
+From 424f64f27d94f83ed946ebfcf9b9543c828f9f25 Mon Sep 17 00:00:00 2001
+From: Vadim Zeitlin <vadim@wxwidgets.org>
+Date: Sun, 27 May 2018 22:56:05 +0200
+Subject: [PATCH] Fix invalid cast in wxMSW AutoHANDLE::InvalidHandle()
+
+Somehow this compiled with the previous gcc versions (as well as MSVS),
+but a static_cast from an integer wxUIntPtr type to a pointer HANDLE
+type is obviously invalid and a reinterpret_cast is needed here.
+
+This fixes compilation with g++ 8.
+---
+ include/wx/msw/private.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/wx/msw/private.h b/include/wx/msw/private.h
+index f833a58a0f0..1e4d0f8fcd8 100644
+--- a/include/wx/msw/private.h
++++ b/include/wx/msw/private.h
+@@ -145,7 +145,7 @@ class AutoHANDLE
+     // implicitly convertible to HANDLE, which is a pointer.
+     static HANDLE InvalidHandle()
+     {
+-        return static_cast<HANDLE>(INVALID_VALUE);
++        return reinterpret_cast<HANDLE>(INVALID_VALUE);
+     }
+ 
+     void DoClose()
