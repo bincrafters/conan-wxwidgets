@@ -7,7 +7,7 @@ import os
 
 class wxWidgetsConan(ConanFile):
     name = "wxwidgets"
-    version = "3.1.1"
+    version = "3.1.2"
     description = "wxWidgets is a C++ library that lets developers create applications for Windows, Mac OS X, " \
                   "Linux and other platforms with a single code base."
     url = "https://github.com/bincrafters/conan-libname"
@@ -126,7 +126,6 @@ class wxWidgetsConan(ConanFile):
         tools.get("{0}/archive/v{1}.tar.gz".format(source_url, self.version))
         extracted_dir = "wxWidgets-" + self.version
         os.rename(extracted_dir, self.source_subfolder)
-        tools.patch(self.source_subfolder, "424f64f27d94f83ed946ebfcf9b9543c828f9f25.patch")
 
     def add_libraries_from_pc(self, library):
         pkg_config = tools.PkgConfig(library)
