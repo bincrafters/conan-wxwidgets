@@ -42,32 +42,34 @@ class wxWidgetsConan(ConanFile):
                "xml": [True, False],
                "xrc": [True, False],
                "cairo": [True, False]}
-    default_options = "shared=False",\
-                      "fPIC=True",\
-                      "unicode=True",\
-                      "compatibility=3.0",\
-                      "zlib=zlib",\
-                      "png=libpng",\
-                      "jpeg=libjpeg",\
-                      "tiff=libtiff",\
-                      "expat=expat",\
-                      "secretstore=True",\
-                      "aui=True",\
-                      "opengl=True",\
-                      "html=True",\
-                      "mediactrl=False",\
-                      "propgrid=True",\
-                      "debugreport=True",\
-                      "ribbon=True",\
-                      "richtext=True",\
-                      "sockets=True",\
-                      "stc=True",\
-                      "webview=True",\
-                      "xml=True",\
-                      "xrc=True",\
-                      "cairo=True"
-    source_subfolder = "source_subfolder"
-    build_subfolder = "build_subfolder"
+    default_options = {
+               "shared": False,
+               "fPIC": True,
+               "unicode": True,
+               "compatibility": "3.0",
+               "zlib": "zlib",
+               "png": "libpng",
+               "jpeg": "libjpeg",
+               "tiff": "libtiff",
+               "expat": "expat",
+               "secretstore": True,
+               "aui": True,
+               "opengl": True,
+               "html": True,
+               "mediactrl": False,
+               "propgrid": True,
+               "debugreport": True,
+               "ribbon": True,
+               "richtext": True,
+               "sockets": True,
+               "stc": True,
+               "webview": True,
+               "xml": True,
+               "xrc": True,
+               "cairo": True
+    }
+    _source_subfolder = "source_subfolder"
+    _build_subfolder = "build_subfolder"
 
     def config_options(self):
         if self.settings.os == 'Windows':
@@ -125,7 +127,7 @@ class wxWidgetsConan(ConanFile):
         source_url = "https://github.com/wxWidgets/wxWidgets"
         tools.get("{0}/archive/v{1}.tar.gz".format(source_url, self.version))
         extracted_dir = "wxWidgets-" + self.version
-        os.rename(extracted_dir, self.source_subfolder)
+        os.rename(extracted_dir, self._source_subfolder)
 
     def add_libraries_from_pc(self, library):
         pkg_config = tools.PkgConfig(library)
@@ -136,7 +138,7 @@ class wxWidgetsConan(ConanFile):
         self.cpp_info.sharedlinkflags.extend(pkg_config.libs_only_other)
         self.cpp_info.exelinkflags.extend(pkg_config.libs_only_other)
 
-    def configure_cmake(self):
+    def _configure_cmake(self):
         def option_value(option):
             return 'OFF' if option is None else 'sys'
         cmake = CMake(self)
@@ -188,19 +190,19 @@ class wxWidgetsConan(ConanFile):
         cmake.definitions['wxUSE_XML'] = self.options.xml
         cmake.definitions['wxUSE_XRC'] = self.options.xrc
 
-        cmake.configure(build_folder=self.build_subfolder)
+        cmake.configure(build_folder=self._build_subfolder)
         return cmake
 
     def build(self):
-        cmake = self.configure_cmake()
+        cmake = self._configure_cmake()
         cmake.build()
 
     def package(self):
-        self.copy(pattern="LICENSE", dst="licenses", src=self.source_subfolder)
-        cmake = self.configure_cmake()
+        self.copy(pattern="LICENSE", dst="licenses", src=self._source_subfolder)
+        cmake = self._configure_cmake()
         cmake.install()
         # copy setup.h
-        self.copy(pattern='*setup.h', dst=os.path.join('include', 'wx'), src=os.path.join(self.build_subfolder, 'lib'),
+        self.copy(pattern='*setup.h', dst=os.path.join('include', 'wx'), src=os.path.join(self._build_subfolder, 'lib'),
                   keep_path=False)
 
     def package_info(self):
