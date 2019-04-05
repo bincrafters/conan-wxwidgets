@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os
-from conans import tools
 from bincrafters import build_template_default
 
 
@@ -12,7 +10,7 @@ def add_build_requires(builds):
 
 def add_required_installers(build):
     installers = ['ninja_installer/1.8.2@bincrafters/stable']
-    build.build_requires.update({"*" : installers})
+    build.build_requires.update({"*": installers})
     return build
 
 

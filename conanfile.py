@@ -109,7 +109,7 @@ class wxWidgetsConan(ConanFile):
 
     def requirements(self):
         if self.options.png == 'libpng':
-            self.requires.add('libpng/1.6.34@bincrafters/stable')
+            self.requires.add('libpng/1.6.36@bincrafters/stable')
         if self.options.jpeg == 'libjpeg':
             self.requires.add('libjpeg/9c@bincrafters/stable')
         elif self.options.jpeg == 'libjpeg-turbo':
@@ -283,7 +283,7 @@ class wxWidgetsConan(ConanFile):
             self.cpp_info.defines.append('__WXGTK__')
             self.add_libraries_from_pc('gtk+-2.0')
             self.add_libraries_from_pc('x11')
-            self.cpp_info.libs.extend(['dl', 'pthread'])
+            self.cpp_info.libs.extend(['dl', 'pthread', 'SM'])
         elif self.settings.os == 'Macos':
             self.cpp_info.defines.extend(['__WXMAC__', '__WXOSX__', '__WXOSX_COCOA__'])
             for framework in ['Carbon',
