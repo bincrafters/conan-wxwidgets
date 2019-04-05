@@ -283,7 +283,7 @@ class wxWidgetsConan(ConanFile):
             self.cpp_info.defines.append('__WXGTK__')
             self.add_libraries_from_pc('gtk+-2.0')
             self.add_libraries_from_pc('x11')
-            self.cpp_info.libs.extend(['dl', 'pthread'])
+            self.cpp_info.libs.extend(['dl', 'pthread', 'SM'])
         elif self.settings.os == 'Macos':
             self.cpp_info.defines.extend(['__WXMAC__', '__WXOSX__', '__WXOSX_COCOA__'])
             for framework in ['Carbon',
