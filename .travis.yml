@@ -4,9 +4,9 @@ env:
 
 linux: &linux
    os: linux
-   sudo: required
+   dist: xenial
    language: python
-   python: "3.6"
+   python: "3.7"
    services:
      - docker
 osx: &osx
@@ -193,16 +193,16 @@ matrix:
         osx_image: xcode9
         env: CONAN_APPLE_CLANG_VERSIONS=9.0 CONAN_BUILD_TYPES=Release
       - <<: *osx
-        osx_image: xcode9.3
+        osx_image: xcode9.4
         env: CONAN_APPLE_CLANG_VERSIONS=9.1 CONAN_BUILD_TYPES=Debug
       - <<: *osx
-        osx_image: xcode9.3
+        osx_image: xcode9.4
         env: CONAN_APPLE_CLANG_VERSIONS=9.1 CONAN_BUILD_TYPES=Release
       - <<: *osx
-        osx_image: xcode9.3
+        osx_image: xcode10.1
         env: CONAN_APPLE_CLANG_VERSIONS=10.0 CONAN_BUILD_TYPES=Debug
       - <<: *osx
-        osx_image: xcode9.3
+        osx_image: xcode10.1
         env: CONAN_APPLE_CLANG_VERSIONS=10.0 CONAN_BUILD_TYPES=Release
 
 install:
