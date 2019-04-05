@@ -209,18 +209,19 @@ class wxWidgetsConan(ConanFile):
         version_tokens = self.version.split('.')
         version_major = version_tokens[0]
         version_minor = version_tokens[1]
+        version_suffix_major_minor = '-%s.%s' % (version_major, version_minor)
         unicode = 'u' if self.options.unicode else ''
         debug = 'd' if self.settings.build_type == 'Debug' else ''
         if self.settings.os == 'Linux':
             prefix = 'wx_'
             toolkit = 'gtk2'
             version = ''
-            suffix = '-%s.%s' % (version_major, version_minor)
+            suffix = version_suffix_major_minor
         elif self.settings.os == 'Macos':
             prefix = 'wx_'
             toolkit = 'osx_cocoa'
             version = ''
-            suffix = '-%s.%s' % (version_major, version_minor)
+            suffix = version_suffix_major_minor
         elif self.settings.os == 'Windows':
             prefix = 'wx'
             toolkit = 'msw'
@@ -362,3 +363,6 @@ class wxWidgetsConan(ConanFile):
                                            'oleacc'])
         if self.settings.compiler == 'Visual Studio':
             self.cpp_info.includedirs.append(os.path.join('include', 'msvc'))
+        elif self.settings.os != 'Windows':
+            unix_include_path = os.path.join("include", "wx{}".format(version_suffix_major_minor))
+            self.cpp_info.includedirs = [unix_include_path] + self.cpp_info.includedirs
