@@ -10,7 +10,7 @@ class wxWidgetsConan(ConanFile):
     version = "3.1.2"
     description = "wxWidgets is a C++ library that lets developers create applications for Windows, Mac OS X, " \
                   "Linux and other platforms with a single code base."
-    url = "https://github.com/bincrafters/conan-libname"
+    url = "https://github.com/bincrafters/conan-wxwidgets"
     homepage = "https://www.wxwidgets.org/"
     author = "Bincrafters <bincrafters@gmail.com>"
     license = "wxWidgets"
@@ -125,7 +125,8 @@ class wxWidgetsConan(ConanFile):
 
     def source(self):
         source_url = "https://github.com/wxWidgets/wxWidgets"
-        tools.get("{0}/archive/v{1}.tar.gz".format(source_url, self.version))
+        sha256 = "7aa0e9e95d969e47c989288016a04bb5c117f09da6f2e55bbb19c0a33e33f96e"
+        tools.get("{0}/archive/v{1}.tar.gz".format(source_url, self.version), sha256=sha256)
         extracted_dir = "wxWidgets-" + self.version
         os.rename(extracted_dir, self._source_subfolder)
 
@@ -157,8 +158,6 @@ class wxWidgetsConan(ConanFile):
         if self.settings.compiler == 'Visual Studio':
             cmake.definitions['wxBUILD_USE_STATIC_RUNTIME'] = 'MT' in str(self.settings.compiler.runtime)
             cmake.definitions['wxBUILD_MSVC_MULTIPROC'] = True
-        if self.settings.os != 'Windows':
-            cmake.definitions['CMAKE_POSITION_INDEPENDENT_CODE'] = self.options.fPIC
         if self.settings.os == 'Linux':
             # TODO : GTK3
             # cmake.definitions['wxBUILD_TOOLKIT'] = 'gtk3'
