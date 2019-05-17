@@ -39,6 +39,7 @@ class wxWidgetsConan(ConanFile):
                "jpeg": ["off", "sys", "libjpeg", "libjpeg-turbo", "mozjpeg"],
                "tiff": ["off", "sys", "libtiff"],
                "expat": ["off", "sys", "expat"],
+               "regex": [True, False],
                "secretstore": [True, False],
                "aui": [True, False],
                "opengl": [True, False],
@@ -71,6 +72,7 @@ class wxWidgetsConan(ConanFile):
                "jpeg": "libjpeg",
                "tiff": "libtiff",
                "expat": "expat",
+               "regex": True,
                "secretstore": True,
                "aui": True,
                "opengl": True,
@@ -197,6 +199,7 @@ class wxWidgetsConan(ConanFile):
         cmake.definitions['wxUSE_LIBTIFF'] = 'sys' if self.options.tiff != 'off' else 'OFF'
         cmake.definitions['wxUSE_ZLIB'] = 'sys' if self.options.zlib != 'off' else 'OFF'
         cmake.definitions['wxUSE_EXPAT'] = 'sys' if self.options.expat != 'off' else 'OFF'
+        cmake.definitions['wxUSE_REGEX'] = 'builtin' if self.options.regex else 'OFF'
 
         # wxWidgets features
         cmake.definitions['wxUSE_UNICODE'] = self.options.unicode
@@ -326,6 +329,8 @@ class wxWidgetsConan(ConanFile):
             libs.append(library_pattern('stc'))
         if self.options.webview:
             libs.append(library_pattern('webview'))
+        if self.options.regex:
+            libs.append('wxregex{unicode}{debug}{suffix}')
         if self.options.xrc:
             libs.append(library_pattern('xrc'))
         for lib in reversed(libs):

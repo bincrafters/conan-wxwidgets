@@ -66,6 +66,7 @@ The following command both runs all the steps of the conan file, and publishes t
 | mediactrl      | False |  [True, False] |
 | propgrid      | True |  [True, False] |
 | debugreport      | True |  [True, False] |
+| regex      | True |  [True, False] |
 | ribbon      | True |  [True, False] |
 | richtext      | True |  [True, False] |
 | sockets      | True |  [True, False] |
