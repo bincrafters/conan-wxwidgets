@@ -109,7 +109,7 @@ class wxWidgetsConan(ConanFile):
 
     def requirements(self):
         if self.options.png == 'libpng':
-            self.requires.add('libpng/1.6.36@bincrafters/stable')
+            self.requires.add('libpng/1.6.37@bincrafters/stable')
         if self.options.jpeg == 'libjpeg':
             self.requires.add('libjpeg/9c@bincrafters/stable')
         elif self.options.jpeg == 'libjpeg-turbo':
