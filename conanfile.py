@@ -325,9 +325,7 @@ class wxWidgetsConan(ConanFile):
                                'gcc': 'gcc',
                                'clang': 'clang'}.get(str(self.settings.compiler))
 
-            arch_suffix = '_x64' if self.settings.compiler == 'Visual Studio' and self.settings.arch == 'x86_64' else ''
-            # use the following code in next release:
-            # arch_suffix = '_x64' if self.settings.arch == 'x86_64' else ''
+            arch_suffix = '_x64' if self.settings.arch == 'x86_64' else ''
             lib_suffix = '_dll' if self.options.shared else '_lib'
             libdir = '%s%s%s' % (compiler_prefix, arch_suffix, lib_suffix)
             libdir = os.path.join('lib', libdir)
