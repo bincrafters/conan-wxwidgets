@@ -43,7 +43,7 @@ environment:
         - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
           CONAN_VISUAL_VERSIONS: 15
           CONAN_BUILD_TYPES: Debug
-          CONAN_ARCHS: x86_64
+          CONAN_ARCHS: x86
         - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
           CONAN_VISUAL_VERSIONS: 16
           CONAN_BUILD_TYPES: Release
@@ -59,7 +59,7 @@ environment:
         - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
           CONAN_VISUAL_VERSIONS: 16
           CONAN_BUILD_TYPES: Debug
-          CONAN_ARCHS: x86_64
+          CONAN_ARCHS: x86
 
 install:
   - set PATH=%PYTHON_HOME%;%PYTHON_HOME%/Scripts/;%PATH%
