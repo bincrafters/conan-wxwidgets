@@ -18,15 +18,32 @@ class wxWidgetsConan(ConanFile):
     exports_sources = ["CMakeLists.txt"]
     generators = "cmake"
     settings = "os", "arch", "compiler", "build_type"
+    
+    # 3rd-party dependencies
+    #
+    # Specify "sys" if you want CMake to find_package for a dependency
+    # which was installed outside of Conan.
+    #
+    # Specify one of the library names such as "libjpeg-turbo" if you 
+    # want Conan to obtain that library, and have CMake use that via find_package.
+    #
+    # In either case, the string "sys" will be passed to CMake in the configure step
+    # 
+    # Specify "off" to compile without support for a particular library/format
+    #
+    # This package is intentionally not capable of using the git submodules. 
+    # It gets sources from github release, which do not include submodule content.
+    # For this reason, "builtin" is not a valid value for these options when using Conan.
+
     options = {"shared": [True, False],
                "fPIC": [True, False],
                "unicode": [True, False],
                "compatibility": ["2.8", "3.0", "3.1"],
-               "zlib": [None, "system", "zlib"],
-               "png": [None, "system", "libpng"],
-               "jpeg": [None, "system", "libjpeg", "libjpeg-turbo", "mozjpeg"],
-               "tiff": [None, "system", "libtiff"],
-               "expat": [None, "system", "expat"],
+               "zlib": ["off", "sys", "zlib"],
+               "png": ["off", "sys", "libpng"],
+               "jpeg": ["off", "sys", "libjpeg", "libjpeg-turbo", "mozjpeg"],
+               "tiff": ["off", "sys", "libtiff"],
+               "expat": ["off", "sys", "expat"],
                "secretstore": [True, False],
                "aui": [True, False],
                "opengl": [True, False],
@@ -140,8 +157,6 @@ class wxWidgetsConan(ConanFile):
         self.cpp_info.exelinkflags.extend(pkg_config.libs_only_other)
 
     def _configure_cmake(self):
-        def option_value(option):
-            return 'OFF' if option is None else 'sys'
         cmake = CMake(self)
 
         # generic build options
@@ -163,12 +178,11 @@ class wxWidgetsConan(ConanFile):
             # cmake.definitions['wxBUILD_TOOLKIT'] = 'gtk3'
             cmake.definitions['wxUSE_CAIRO'] = self.options.cairo
 
-        # 3rd-party libraries
-        cmake.definitions['wxUSE_LIBPNG'] = option_value(self.options.png)
-        cmake.definitions['wxUSE_LIBJPEG'] = option_value(self.options.jpeg)
-        cmake.definitions['wxUSE_LIBTIFF'] = option_value(self.options.tiff)
-        cmake.definitions['wxUSE_ZLIB'] = option_value(self.options.zlib)
-        cmake.definitions['wxUSE_EXPAT'] = option_value(self.options.expat)
+        cmake.definitions['wxUSE_LIBPNG'] = 'sys' if self.options.png != 'off' else 'OFF'
+        cmake.definitions['wxUSE_LIBJPEG'] = 'sys' if self.options.jpeg != 'off' else 'OFF'
+        cmake.definitions['wxUSE_LIBTIFF'] = 'sys' if self.options.tiff != 'off' else 'OFF'
+        cmake.definitions['wxUSE_ZLIB'] = 'sys' if self.options.zlib != 'off' else 'OFF'
+        cmake.definitions['wxUSE_EXPAT'] = 'sys' if self.options.expat != 'off' else 'OFF'
 
         # wxWidgets features
         cmake.definitions['wxUSE_UNICODE'] = self.options.unicode
