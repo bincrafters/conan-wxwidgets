@@ -1,3 +1,6 @@
+variables:
+- group: conan-credentials
+
 jobs:
 - job: Linux
   pool:
