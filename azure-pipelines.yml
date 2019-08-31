@@ -16,6 +16,8 @@ jobs:
       ./.ci/install.sh
       chmod +x .ci/run.sh
       ./.ci/run.sh
+    variables:
+      CONAN_DOCKER_32_IMAGES: 1
     env:
       CONAN_LOGIN_USERNAME: $(CONAN_LOGIN_USERNAME)
       CONAN_PASSWORD: $(CONAN_PASSWORD)
