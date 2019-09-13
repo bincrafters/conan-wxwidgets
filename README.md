@@ -53,11 +53,11 @@ The following command both runs all the steps of the conan file, and publishes t
 | fPIC      | True |  [True, False] |
 | unicode      | True |  [True, False] |
 | compatibility      | 3.0 |  ['2.8', '3.0', '3.1'] |
-| zlib      | zlib |  [None, 'system', 'zlib'] |
-| png      | libpng |  [None, 'system', 'libpng'] |
-| jpeg      | libjpeg |  [None, 'system', 'libjpeg', 'libjpeg-turbo', 'mozjpeg'] |
-| tiff      | libtiff |  [None, 'system', 'libtiff'] |
-| expat      | expat |  [None, 'system', 'expat'] |
+| zlib      | zlib |  ["off", "sys", 'zlib'] |
+| png      | libpng |  ["off", "sys", 'libpng'] |
+| jpeg      | libjpeg |  ["off", "sys", 'libjpeg', 'libjpeg-turbo', 'mozjpeg'] |
+| tiff      | libtiff |  ["off", "sys", 'libtiff'] |
+| expat      | expat |  ["off", "sys", 'expat'] |
 | secretstore      | True |  [True, False] |
 | aui      | True |  [True, False] |
 | opengl      | True |  [True, False] |
