@@ -16,20 +16,20 @@ class wxWidgetsConan(ConanFile):
     exports_sources = ["CMakeLists.txt"]
     generators = "cmake"
     settings = "os", "arch", "compiler", "build_type"
-    
+
     # 3rd-party dependencies
     #
     # Specify "sys" if you want CMake to find_package for a dependency
     # which was installed outside of Conan.
     #
-    # Specify one of the library names such as "libjpeg-turbo" if you 
+    # Specify one of the library names such as "libjpeg-turbo" if you
     # want Conan to obtain that library, and have CMake use that via find_package.
     #
     # In either case, the string "sys" will be passed to CMake in the configure step
-    # 
+    #
     # Specify "off" to compile without support for a particular library/format
     #
-    # This package is intentionally not capable of using the git submodules. 
+    # This package is intentionally not capable of using the git submodules.
     # It gets sources from github release, which do not include submodule content.
     # For this reason, "builtin" is not a valid value for these options when using Conan.
 
@@ -56,7 +56,14 @@ class wxWidgetsConan(ConanFile):
                "webview": [True, False],
                "xml": [True, False],
                "xrc": [True, False],
-               "cairo": [True, False]}
+               "cairo": [True, False],
+               "help": [True, False],
+               "html_help": [True, False],
+               "url": [True, False],
+               "protocol": [True, False],
+               "fs_inet": [True, False],
+               "custom_enables": "ANY", # comma splitted list
+               "custom_disables": "ANY"}
     default_options = {
                "shared": False,
                "fPIC": True,
@@ -81,7 +88,14 @@ class wxWidgetsConan(ConanFile):
                "webview": True,
                "xml": True,
                "xrc": True,
-               "cairo": True
+               "cairo": True,
+               "help": True,
+               "html_help": True,
+               "url": True,
+               "protocol": True,
+               "fs_inet": False,
+               "custom_enables": "",
+               "custom_disables": ""
     }
     _source_subfolder = "source_subfolder"
     _build_subfolder = "build_subfolder"
@@ -200,6 +214,18 @@ class wxWidgetsConan(ConanFile):
         cmake.definitions['wxUSE_WEBVIEW'] = self.options.webview
         cmake.definitions['wxUSE_XML'] = self.options.xml
         cmake.definitions['wxUSE_XRC'] = self.options.xrc
+        cmake.definitions['wxUSE_HELP'] = self.options.help
+        cmake.definitions['wxUSE_WXHTML_HELP'] = self.options.html_help
+        cmake.definitions['wxUSE_URL'] = self.options.protocol
+        cmake.definitions['wxUSE_PROTOCOL'] = self.options.protocol
+        cmake.definitions['wxUSE_FS_INET'] = self.options.fs_inet
+
+        for item in str(self.options.custom_enables).split(","):
+            if len(item) > 0:
+                cmake.definitions[item] = True
+        for item in str(self.options.custom_disables).split(","):
+            if len(item) > 0:
+                cmake.definitions[item] = False
 
         cmake.configure(build_folder=self._build_subfolder)
         return cmake
