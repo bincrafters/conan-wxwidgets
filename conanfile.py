@@ -128,7 +128,7 @@ class wxWidgetsConan(ConanFile):
         if self.options.png == 'libpng':
             self.requires.add('libpng/1.6.37@bincrafters/stable')
         if self.options.jpeg == 'libjpeg':
-            self.requires.add('libjpeg/9c@bincrafters/stable')
+            self.requires.add('libjpeg/9c')
         elif self.options.jpeg == 'libjpeg-turbo':
             self.requires.add('libjpeg-turbo/1.5.2@bincrafters/stable')
         elif self.options.jpeg == 'mozjpeg':
@@ -136,9 +136,9 @@ class wxWidgetsConan(ConanFile):
         if self.options.tiff == 'libtiff':
             self.requires.add('libtiff/4.0.9@bincrafters/stable')
         if self.options.zlib == 'zlib':
-            self.requires.add('zlib/1.2.11@conan/stable')
+            self.requires.add('zlib/1.2.11')
         if self.options.expat == 'expat':
-            self.requires.add('Expat/2.2.6@pix4d/stable')
+            self.requires.add('expat/2.2.7')
 
     def source(self):
         source_url = "https://github.com/wxWidgets/wxWidgets"
