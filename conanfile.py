@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 from conans import ConanFile, CMake, tools
 import os
 
@@ -8,10 +5,11 @@ import os
 class wxWidgetsConan(ConanFile):
     name = "wxwidgets"
     version = "3.1.2"
-    description = "wxWidgets is a C++ library that lets developers create applications for Windows, Mac OS X, " \
+    description = "wxWidgets is a C++ library that lets developers create applications for Windows, macOS, " \
                   "Linux and other platforms with a single code base."
+    topics = ("conan", "wxwidgets", "gui", "ui")
     url = "https://github.com/bincrafters/conan-wxwidgets"
-    homepage = "https://www.wxwidgets.org/"
+    homepage = "https://www.wxwidgets.org"
     author = "Bincrafters <bincrafters@gmail.com>"
     license = "wxWidgets"
     exports = ["LICENSE.md", "*.patch"]
@@ -126,7 +124,7 @@ class wxWidgetsConan(ConanFile):
 
     def requirements(self):
         if self.options.png == 'libpng':
-            self.requires.add('libpng/1.6.37@bincrafters/stable')
+            self.requires.add('libpng/1.6.37')
         if self.options.jpeg == 'libjpeg':
             self.requires.add('libjpeg/9c')
         elif self.options.jpeg == 'libjpeg-turbo':
