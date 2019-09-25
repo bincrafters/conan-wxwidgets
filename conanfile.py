@@ -93,7 +93,7 @@ class wxWidgetsConan(ConanFile):
                "html_help": True,
                "url": True,
                "protocol": True,
-               "fs_inet": False,
+               "fs_inet": True,
                "custom_enables": "",
                "custom_disables": ""
     }
