@@ -146,7 +146,7 @@ class wxWidgetsConan(ConanFile):
         elif self.options.jpeg == 'mozjpeg':
             self.requires.add('mozjpeg/3.3.1@bincrafters/stable')
         if self.options.tiff == 'libtiff':
-            self.requires.add('libtiff/4.0.9@bincrafters/stable')
+            self.requires.add('libtiff/4.0.9')
         if self.options.zlib == 'zlib':
             self.requires.add('zlib/1.2.11')
         if self.options.expat == 'expat':
