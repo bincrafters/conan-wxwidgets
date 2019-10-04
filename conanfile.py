@@ -13,7 +13,7 @@ class wxWidgetsConan(ConanFile):
     author = "Bincrafters <bincrafters@gmail.com>"
     license = "wxWidgets"
     exports = ["LICENSE.md", "*.patch"]
-    exports_sources = ["CMakeLists.txt"]
+    exports_sources = ["CMakeLists.txt", "modules/FindEXPAT.cmake"]
     generators = "cmake"
     settings = "os", "arch", "compiler", "build_type"
 
@@ -226,6 +226,8 @@ class wxWidgetsConan(ConanFile):
         for item in str(self.options.custom_disables).split(","):
             if len(item) > 0:
                 cmake.definitions[item] = False
+
+        cmake.definitions['CMAKE_MODULE_PATH'] = os.path.abspath('modules').replace('\\', '/')
 
         cmake.configure(build_folder=self._build_subfolder)
         return cmake
