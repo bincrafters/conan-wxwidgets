@@ -4,7 +4,6 @@ import os
 
 class wxWidgetsConan(ConanFile):
     name = "wxwidgets"
-    version = "3.1.2"
     description = "wxWidgets is a C++ library that lets developers create applications for Windows, macOS, " \
                   "Linux and other platforms with a single code base."
     topics = ("conan", "wxwidgets", "gui", "ui")
@@ -146,16 +145,14 @@ class wxWidgetsConan(ConanFile):
         elif self.options.jpeg == 'mozjpeg':
             self.requires.add('mozjpeg/3.3.1@bincrafters/stable')
         if self.options.tiff == 'libtiff':
-            self.requires.add('libtiff/4.0.9@bincrafters/stable')
+            self.requires.add('libtiff/4.0.9')
         if self.options.zlib == 'zlib':
             self.requires.add('zlib/1.2.11')
         if self.options.expat == 'expat':
             self.requires.add('expat/2.2.7')
 
     def source(self):
-        source_url = "https://github.com/wxWidgets/wxWidgets"
-        sha256 = "7aa0e9e95d969e47c989288016a04bb5c117f09da6f2e55bbb19c0a33e33f96e"
-        tools.get("{0}/archive/v{1}.tar.gz".format(source_url, self.version), sha256=sha256)
+        tools.get(**self.conan_data["sources"][self.version])
         extracted_dir = "wxWidgets-" + self.version
         os.rename(extracted_dir, self._source_subfolder)
 
