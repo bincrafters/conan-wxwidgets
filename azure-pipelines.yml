@@ -11,3 +11,4 @@ jobs:
     conanLoginUsername: $(CONAN_LOGIN_USERNAME)
     conanPassword: $(CONAN_PASSWORD)
     splitByBuildTypes: "true"
+    requireMoreDiskSpace: "true"
