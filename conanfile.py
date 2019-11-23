@@ -9,7 +9,6 @@ class wxWidgetsConan(ConanFile):
     topics = ("conan", "wxwidgets", "gui", "ui")
     url = "https://github.com/bincrafters/conan-wxwidgets"
     homepage = "https://www.wxwidgets.org"
-    author = "Bincrafters <bincrafters@gmail.com>"
     license = "wxWidgets"
     exports = ["LICENSE.md", "*.patch"]
     exports_sources = ["CMakeLists.txt"]
