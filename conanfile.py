@@ -259,7 +259,15 @@ class wxWidgetsConan(ConanFile):
         version_minor = version_tokens[1]
         version_suffix_major_minor = '-%s.%s' % (version_major, version_minor)
         unicode = 'u' if self.options.unicode else ''
-        debug = 'd' if self.settings.build_type == 'Debug' else ''
+        
+        # wx no longer uses a debug suffix for non-windows platforms from 3.1.3 onwards
+        use_debug_suffix = False
+        if self.settings.build_type == 'Debug':
+            version_list = [int(part) for part in version_tokens]
+            use_debug_suffix = (self.settings.os == 'Windows' or version_list < [3, 1, 3])
+        
+        debug = 'd' if use_debug_suffix else ''
+        
         if self.settings.os == 'Linux':
             prefix = 'wx_'
             toolkit = 'gtk2'
