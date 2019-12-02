@@ -185,6 +185,13 @@ class wxWidgetsConan(ConanFile):
             # TODO : GTK3
             # cmake.definitions['wxBUILD_TOOLKIT'] = 'gtk3'
             cmake.definitions['wxUSE_CAIRO'] = self.options.cairo
+        # Disable some optional libraries that will otherwise lead to non-deterministic builds
+        if self.settings.os != "Windows":
+            cmake.definitions['wxUSE_LIBSDL'] = 'OFF'
+            cmake.definitions['wxUSE_LIBICONV'] = 'OFF'
+            cmake.definitions['wxUSE_LIBNOTIFY'] = 'OFF'
+            cmake.definitions['wxUSE_LIBMSPACK'] = 'OFF'
+            cmake.definitions['wxUSE_LIBGNOMEVFS'] = 'OFF'
 
         cmake.definitions['wxUSE_LIBPNG'] = 'sys' if self.options.png != 'off' else 'OFF'
         cmake.definitions['wxUSE_LIBJPEG'] = 'sys' if self.options.jpeg != 'off' else 'OFF'
@@ -361,7 +368,7 @@ class wxWidgetsConan(ConanFile):
                               'WebKit']:
                 self.cpp_info.exelinkflags.append('-framework %s' % framework)
             self.cpp_info.sharedlinkflags = self.cpp_info.exelinkflags
-            self.cpp_info.libs.append('iconv')
+            #self.cpp_info.libs.append('iconv')
         elif self.settings.os == 'Windows':
             # see cmake/init.cmake
             compiler_prefix = {'Visual Studio': 'vc',
