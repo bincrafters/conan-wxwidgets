@@ -368,7 +368,6 @@ class wxWidgetsConan(ConanFile):
                               'WebKit']:
                 self.cpp_info.exelinkflags.append('-framework %s' % framework)
             self.cpp_info.sharedlinkflags = self.cpp_info.exelinkflags
-            #self.cpp_info.libs.append('iconv')
         elif self.settings.os == 'Windows':
             # see cmake/init.cmake
             compiler_prefix = {'Visual Studio': 'vc',
