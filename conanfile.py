@@ -12,7 +12,7 @@ class wxWidgetsConan(ConanFile):
     license = "wxWidgets"
     exports = ["LICENSE.md", "*.patch"]
     exports_sources = ["CMakeLists.txt"]
-    generators = "cmake"
+    generators = ["cmake", "cmake_find_package"]
     settings = "os", "arch", "compiler", "build_type"
 
     # 3rd-party dependencies
