@@ -10,7 +10,6 @@ class wxWidgetsConan(ConanFile):
     url = "https://github.com/bincrafters/conan-wxwidgets"
     homepage = "https://www.wxwidgets.org"
     license = "wxWidgets"
-    exports = ["LICENSE.md", "*.patch"]
     exports_sources = ["CMakeLists.txt"]
     generators = ["cmake", "cmake_find_package"]
     settings = "os", "arch", "compiler", "build_type"
