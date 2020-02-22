@@ -13,6 +13,7 @@ class wxWidgetsConan(ConanFile):
     exports_sources = ["CMakeLists.txt"]
     generators = ["cmake", "cmake_find_package"]
     settings = "os", "arch", "compiler", "build_type"
+    _cmake = None
 
     # 3rd-party dependencies
     #
@@ -133,6 +134,9 @@ class wxWidgetsConan(ConanFile):
                 for package in packages:
                     installer.install(package)
 
+    def build_requirements(self):
+        self.build_requires("ninja/1.9.0")
+
     def requirements(self):
         if self.options.png == 'libpng':
             self.requires.add('libpng/1.6.37')
@@ -164,6 +168,9 @@ class wxWidgetsConan(ConanFile):
         self.cpp_info.exelinkflags.extend(pkg_config.libs_only_other)
 
     def _configure_cmake(self):
+        if self._cmake:
+            return self._cmake
+
         cmake = CMake(self)
 
         # generic build options
@@ -230,7 +237,9 @@ class wxWidgetsConan(ConanFile):
                 cmake.definitions[item] = False
 
         cmake.configure(build_folder=self._build_subfolder)
-        return cmake
+
+        self._cmake = cmake 
+        return self._cmake
 
     def build(self):
         cmake = self._configure_cmake()
