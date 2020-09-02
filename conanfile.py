@@ -143,7 +143,7 @@ class wxWidgetsConan(ConanFile):
         if self.options.jpeg == 'libjpeg':
             self.requires.add('libjpeg/9d')
         elif self.options.jpeg == 'libjpeg-turbo':
-            self.requires.add('libjpeg-turbo/2.0.4')
+            self.requires.add('libjpeg-turbo/2.0.5')
         elif self.options.jpeg == 'mozjpeg':
             self.requires.add('mozjpeg/3.3.1')
         if self.options.tiff == 'libtiff':
