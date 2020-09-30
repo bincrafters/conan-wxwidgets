@@ -135,7 +135,7 @@ class wxWidgetsConan(ConanFile):
                     installer.install(package)
 
     def build_requirements(self):
-        self.build_requires("ninja/1.10.0")
+        self.build_requires("ninja/1.10.1")
 
     def requirements(self):
         if self.options.png == 'libpng':
