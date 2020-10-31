@@ -10,7 +10,7 @@ class wxWidgetsConan(ConanFile):
     url = "https://github.com/bincrafters/conan-wxwidgets"
     homepage = "https://www.wxwidgets.org"
     license = "wxWidgets"
-    exports_sources = ["CMakeLists.txt"]
+    exports_sources = ["CMakeLists.txt", "patches/*"]
     generators = ["cmake", "cmake_find_package"]
     settings = "os", "arch", "compiler", "build_type"
     _cmake = None
@@ -242,6 +242,8 @@ class wxWidgetsConan(ConanFile):
         return self._cmake
 
     def build(self):
+        for patch in self.conan_data["patches"][self.version]:
+            tools.patch(**patch)
         cmake = self._configure_cmake()
         cmake.build()
 
