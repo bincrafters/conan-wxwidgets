@@ -4,12 +4,6 @@ environment:
   PYTHON_HOME: "C:\\Python37"
 
   matrix:
-    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-      CONAN_VISUAL_VERSIONS: 14
-      CONAN_BUILD_TYPES: Release
-    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-      CONAN_VISUAL_VERSIONS: 14
-      CONAN_BUILD_TYPES: Debug
 
 install:
   - set PATH=%PYTHON_HOME%;%PYTHON_HOME%/Scripts/;%PATH%
